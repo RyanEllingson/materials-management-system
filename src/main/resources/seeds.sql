@@ -1,0 +1,1 @@
+insert into roles (role) values ('Admin'), ('Planner'), ('Standard');
