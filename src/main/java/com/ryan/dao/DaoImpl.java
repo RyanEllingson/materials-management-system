@@ -19,14 +19,13 @@ class DaoImpl implements Dao {
 	@Override
 	public int insertUser(User user) {
 		int insertId = 0;
-		String sql = "insert into users (user_id, password, first_name, last_name, role_id) values (?,?,?,?,?)";
+		String sql = "insert into users (password, first_name, last_name, role_id) values (?,?,?,?)";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, user.getUserId());
-			ps.setString(2, user.getPassword());
-			ps.setString(3, user.getFirstName());
-			ps.setString(4, user.getLastName());
-			ps.setInt(5, user.getRole().getRoleId());
+			ps.setString(1, user.getPassword());
+			ps.setString(2, user.getFirstName());
+			ps.setString(3, user.getLastName());
+			ps.setInt(4, user.getRole().getRoleId());
 			ps.execute();
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
@@ -75,6 +74,18 @@ class DaoImpl implements Dao {
 			e.printStackTrace();
 		}
 		return role;
+	}
+	
+	@Override
+	public void deleteUserById(int userId) {
+		String sql = "delete from users where user_id = ?";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, userId);
+			ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
