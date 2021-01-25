@@ -18,5 +18,17 @@ public class Users {
 		int insertId = dao.insertUser(user);
 		return dao.getUserById(insertId);
 	}
+	
+	public static User login(int userId, String password) {
+		Dao dao = DaoFactory.getDao();
+		User user = dao.getUserById(userId);
+		if (user.getUserId() != 0) {
+			String[] passArr = user.getPassword().split("/");
+			if (!HashGenerator.comparePasswords(passArr[0], password, passArr[1])) {
+				user = new User();
+			}
+		}
+		return user;
+	}
 
 }

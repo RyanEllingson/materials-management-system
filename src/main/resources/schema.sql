@@ -6,6 +6,7 @@ create table roles (
 
 create table users (
     user_id int unique not null generated always as identity,
+    email varchar(255) not null unique,
     password varchar(255) not null,
     first_name varchar(20) not null,
     last_name varchar(20) not null,

@@ -1,6 +1,7 @@
 package com.ryan.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,15 +19,26 @@ public class UsersTest {
 	@BeforeClass
 	public static void setup() {
 		dao = DaoFactory.getDao();
+		user = Users.register("password", "testy", "testerson", 1);
 	}
 
 	@Test
-	public void shouldRegisterUser() {
-		user = Users.register("password", "testy", "testerson", 1);
-		System.out.println(user.getPassword());
+	public void shouldHaveRegisterdUser() {
 		assertEquals("testy", user.getFirstName());
 		assertEquals("testerson", user.getLastName());
 		assertEquals("Admin", user.getRole().getRole());
+	}
+	
+	@Test
+	public void shouldLoginRegisteredUser() {
+		User returnedUser = Users.login(user.getUserId(), "password");
+		assertEquals("testy", returnedUser.getFirstName());
+	}
+	
+	@Test
+	public void shouldNotLoginUnregisteredUser() {
+		User returnedUser = Users.login(0, "blabla");
+		assertNull(returnedUser.getFirstName());
 	}
 	
 	@AfterClass

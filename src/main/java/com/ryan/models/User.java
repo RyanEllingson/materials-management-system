@@ -2,6 +2,7 @@ package com.ryan.models;
 
 public class User {
 	private int userId;
+	private String email;
 	private String password;
 	private String firstName;
 	private String lastName;
@@ -11,9 +12,10 @@ public class User {
 		super();
 	}
 
-	public User(int userId, String password, String firstName, String lastName, Role role) {
+	public User(int userId, String email, String password, String firstName, String lastName, Role role) {
 		super();
 		this.userId = userId;
+		this.email = email;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -26,6 +28,14 @@ public class User {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -62,10 +72,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", password=" + password + ", firstName=" + firstName + ", lastName="
+		return "User [userId=" + userId + ",email=" + email + ", password=" + password + ", firstName=" + firstName + ", lastName="
 				+ lastName + ", role=" + role + "]";
 	}
-	
-	
 	
 }

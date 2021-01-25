@@ -27,7 +27,7 @@ public class DaoTest {
 	
 	@Test
 	public void shouldInsertRetrieveAndDeleteUser() {
-		User testUser = new User(0, "password", "testy", "testerson", dao.getRoleById(1));
+		User testUser = new User(0, "email", "password", "testy", "testerson", dao.getRoleById(1));
 		int insertId = dao.insertUser(testUser);
 		User result = dao.getUserById(insertId);
 		assertEquals("password", result.getPassword());
