@@ -14,3 +14,9 @@ create table users (
     primary key (user_id),
     foreign key (role_id) references roles(role_id)
 );
+
+create table material_types (
+    material_type_id int unique not null generated always as identity,
+    material_type varchar(30) unique not null,
+    primary key (material_type_id)
+);
