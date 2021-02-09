@@ -10,23 +10,23 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class HashGenerator {
 	
-	public static String generateHash(String inputStr) {
+	public static String HashPassword(String inputPass) {
 //		generate random salt
 		SecureRandom random = new SecureRandom();
 		byte[] salt = new byte[16];
 		random.nextBytes(salt);
-		String result = generateHash(inputStr, salt);
+		String result = generateHash(inputPass, salt);
 		result += "/";
 		for (int i=0; i<salt.length; i++) {
 			result += salt[i];
-			if (i < salt.length -1) {
+			if (i < salt.length - 1) {
 				result += ",";
 			}
 		}
 		return result;
 	}
 
-	public static String generateHash(String inputStr, byte[] salt) {
+	private static String generateHash(String inputStr, byte[] salt) {
 		String result = "";
 //		generate hash from input String
 		KeySpec spec = new PBEKeySpec(inputStr.toCharArray(), salt, 65536, 128);
