@@ -1,5 +1,5 @@
 insert into roles (role) values ('Admin'), ('Planner'), ('Standard');
 
-insert into material_types (material_type) values ('Raw Material'), ('Intermediate'), ('Finished Good');
+insert into input_types (input_type) values ('Raw Material'), ('Intermediate'), ('Finished Good'), ('Labor');
 
-insert into units (unit) values ('Each'), ('Pounds');
+insert into units (unit) values ('Each'), ('Pounds'), ('Hours');

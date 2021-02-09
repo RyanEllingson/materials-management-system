@@ -1,14 +1,14 @@
 package com.ryan.models;
 
-public class MaterialType {
+public class InputType {
 	private int materialTypeId;
 	private String materialType;
 	
-	public MaterialType() {
+	public InputType() {
 		super();
 	}
 
-	public MaterialType(int materialTypeId, String materialType) {
+	public InputType(int materialTypeId, String materialType) {
 		super();
 		this.materialTypeId = materialTypeId;
 		this.materialType = materialType;
@@ -52,7 +52,7 @@ public class MaterialType {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MaterialType other = (MaterialType) obj;
+		InputType other = (InputType) obj;
 		if (materialType == null) {
 			if (other.materialType != null)
 				return false;

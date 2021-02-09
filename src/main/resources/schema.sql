@@ -15,10 +15,10 @@ create table users (
     foreign key (role_id) references roles(role_id)
 );
 
-create table material_types (
-    material_type_id int unique not null generated always as identity,
-    material_type varchar(30) unique not null,
-    primary key (material_type_id)
+create table input_types (
+    input_type_id int unique not null generated always as identity,
+    input_type varchar(30) unique not null,
+    primary key (input_type_id)
 );
 
 create table units (
@@ -27,12 +27,23 @@ create table units (
     primary key (unit_id)
 );
 
-create table materials (
-    material_id int unique not null generated always as identity,
-    material_name varchar(255) not null,
-    material_type_id int not null,
+create table inputs (
+    input_id int unique not null generated always as identity,
+    input_name varchar(255) not null,
+    input_type_id int not null,
     unit_id int not null,
-    primary key (material_id),
-    foreign key (material_type_id) references material_types(material_type_id),
+    unit_cost decimal(6,5) not null,
+    primary key (input_id),
+    foreign key (input_type_id) references input_types(input_type_id),
     foreign key (unit_id) references units(unit_id)
 );
+
+-- create table materials (
+--     material_id int unique not null generated always as identity,
+--     material_name varchar(255) not null,
+--     material_type_id int not null,
+--     unit_id int not null,
+--     primary key (material_id),
+--     foreign key (material_type_id) references material_types(material_type_id),
+--     foreign key (unit_id) references units(unit_id)
+-- );
