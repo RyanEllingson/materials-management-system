@@ -30,7 +30,7 @@ public class UnitDatabaseRepositoryTest {
 	@Test
 	public void shouldFindAllUnits() {
 		List<Unit> actual = unitRepo.getAllUnits();
-		assertEquals(3, actual.size());
+		assertEquals(2, actual.size());
 		Unit unit = new Unit(2, "Pounds");
 		assertEquals(unit, actual.get(1));
 	}

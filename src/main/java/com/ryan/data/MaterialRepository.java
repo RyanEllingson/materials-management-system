@@ -11,7 +11,7 @@ public interface MaterialRepository {
 	
 	public Material getMaterialById(int materialId);
 	
-	public List<Material> getMaterialByType(MaterialType materialType);
+	public List<Material> getMaterialsByType(MaterialType materialType);
 	
 	public int updateMaterial(Material material);
 	
