@@ -4,14 +4,23 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ryan.data.RoleDatabaseRepository;
+import com.ryan.data.RoleRepository;
 import com.ryan.models.Role;
 import com.ryan.util.ConnectionFactory;
+import com.ryan.util.Environment;
 
 public class RoleDatabaseRepositoryTest {
-	private static RoleDatabaseRepository roleRepo = new RoleDatabaseRepository(ConnectionFactory.getConnection());
+	private static RoleRepository roleRepo;
+	
+	@BeforeClass
+	public static void setup() {
+		ConnectionFactory.setEnvironment(Environment.TEST);
+		roleRepo = new RoleDatabaseRepository(ConnectionFactory.getConnection());
+	}
 
 	@Test
 	public void shouldGetRoleById() {

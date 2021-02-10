@@ -4,14 +4,23 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ryan.data.MaterialTypeDatabaseRepository;
+import com.ryan.data.MaterialTypeRepository;
 import com.ryan.models.MaterialType;
 import com.ryan.util.ConnectionFactory;
+import com.ryan.util.Environment;
 
 public class MaterialTypeDatabaseRepositoryTest {
-	private static MaterialTypeDatabaseRepository materialTypeRepo = new MaterialTypeDatabaseRepository(ConnectionFactory.getConnection());
+	private static MaterialTypeRepository materialTypeRepo;
+	
+	@BeforeClass
+	public static void setup() {
+		ConnectionFactory.setEnvironment(Environment.TEST);
+		materialTypeRepo = new MaterialTypeDatabaseRepository(ConnectionFactory.getConnection());
+	}
 	
 	@Test
 	public void shouldGetMaterialTypeById() {

@@ -9,12 +9,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ryan.data.UserDatabaseRepository;
+import com.ryan.data.UserRepository;
 import com.ryan.models.Role;
 import com.ryan.models.User;
 import com.ryan.util.ConnectionFactory;
+import com.ryan.util.Environment;
 
 public class UserDatabaseRepositoryTest {
-	private static UserDatabaseRepository userRepo = new UserDatabaseRepository(ConnectionFactory.getConnection());
+	private static UserRepository userRepo;
 	private static int createUserId;
 	private static int readUserId;
 	private static int updateUserId;
@@ -22,6 +24,8 @@ public class UserDatabaseRepositoryTest {
 	
 	@BeforeClass
 	public static void setup() {
+		ConnectionFactory.setEnvironment(Environment.TEST);
+		userRepo = new UserDatabaseRepository(ConnectionFactory.getConnection());
 		User readUser = new User(0, "testemail1", "password1", "firstname1", "lastname1", new Role(1, "Admin"));
 		readUserId = userRepo.insertUser(readUser);
 		User updateUser = new User(0, "testemail2", "password2", "firstname2", "lastname2", new Role(1, "Admin"));

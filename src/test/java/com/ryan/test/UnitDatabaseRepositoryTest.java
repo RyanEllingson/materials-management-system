@@ -4,14 +4,23 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ryan.data.UnitDatabaseRepository;
+import com.ryan.data.UnitRepository;
 import com.ryan.models.Unit;
 import com.ryan.util.ConnectionFactory;
+import com.ryan.util.Environment;
 
 public class UnitDatabaseRepositoryTest {
-	private static UnitDatabaseRepository unitRepo = new UnitDatabaseRepository(ConnectionFactory.getConnection());
+	private static UnitRepository unitRepo;
+	
+	@BeforeClass
+	public static void setup() {
+		ConnectionFactory.setEnvironment(Environment.TEST);
+		unitRepo = new UnitDatabaseRepository(ConnectionFactory.getConnection());
+	}
 	
 	@Test
 	public void shouldFindById() {

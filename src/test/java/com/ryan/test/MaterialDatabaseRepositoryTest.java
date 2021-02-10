@@ -13,13 +13,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ryan.data.MaterialDatabaseRepository;
+import com.ryan.data.MaterialRepository;
 import com.ryan.models.Material;
 import com.ryan.models.MaterialType;
 import com.ryan.models.Unit;
 import com.ryan.util.ConnectionFactory;
+import com.ryan.util.Environment;
 
 public class MaterialDatabaseRepositoryTest {
-	private static MaterialDatabaseRepository materialRepo = new MaterialDatabaseRepository(ConnectionFactory.getConnection());
+	private static MaterialRepository materialRepo;
 	private static int createMaterialId;
 	private static int readMaterialId;
 	private static int updateMaterialId;
@@ -27,6 +29,8 @@ public class MaterialDatabaseRepositoryTest {
 	
 	@BeforeClass
 	public static void setup() {
+		ConnectionFactory.setEnvironment(Environment.TEST);
+		materialRepo = new MaterialDatabaseRepository(ConnectionFactory.getConnection());
 		Material readMaterial = new Material(0, "testmaterial1", new MaterialType(1, null), new Unit(1, null), BigDecimal.ONE);
 		readMaterialId = materialRepo.createMaterial(readMaterial);
 		Material updateMaterial = new Material(0, "testmaterial2", new MaterialType(1, null), new Unit(1, null), BigDecimal.ONE);

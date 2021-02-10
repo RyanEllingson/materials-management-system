@@ -11,11 +11,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ryan.data.LaborRateDatabaseRepository;
+import com.ryan.data.LaborRateRepository;
 import com.ryan.models.LaborRate;
 import com.ryan.util.ConnectionFactory;
+import com.ryan.util.Environment;
 
 public class LaborRateDatabaseRepositoryTest {
-	private static LaborRateDatabaseRepository rateRepo = new LaborRateDatabaseRepository(ConnectionFactory.getConnection());
+	private static LaborRateRepository rateRepo;
 	private static int createRateId;
 	private static int readRateId;
 	private static int updateRateId;
@@ -23,6 +25,8 @@ public class LaborRateDatabaseRepositoryTest {
 	
 	@BeforeClass
 	public static void setup() {
+		ConnectionFactory.setEnvironment(Environment.TEST);
+		rateRepo = new LaborRateDatabaseRepository(ConnectionFactory.getConnection());
 		LaborRate readRate = new LaborRate(0, "testrate1", BigDecimal.ONE);
 		readRateId = rateRepo.createLaborRate(readRate);
 		LaborRate updateRate = new LaborRate(0, "testrate2", BigDecimal.ONE);
