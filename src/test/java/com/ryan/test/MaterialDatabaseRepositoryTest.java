@@ -2,6 +2,7 @@ package com.ryan.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
@@ -39,6 +40,11 @@ public class MaterialDatabaseRepositoryTest {
 		Material material = new Material(0, "testmaterial4", new MaterialType(2, null), new Unit(1, null), BigDecimal.ONE);
 		createMaterialId = materialRepo.createMaterial(material);
 		assertNotEquals(0, createMaterialId);
+		Material createdMaterial = materialRepo.getMaterialById(createMaterialId);
+		assertEquals("testmaterial4", createdMaterial.getMaterialName());
+		assertEquals(new MaterialType(2, null), createdMaterial.getMaterialType());
+		assertEquals(new Unit(1, null), createdMaterial.getUnit());
+		assertEquals(BigDecimal.ONE, createdMaterial.getUnitCost());
 	}
 	
 	@Test
@@ -53,9 +59,12 @@ public class MaterialDatabaseRepositoryTest {
 	
 	@Test
 	public void shouldNotGetNonExistingMaterial() {
-		Material expected = new Material();
-		Material actual = materialRepo.getMaterialById(-1);
-		assertEquals(expected, actual);
+		Material material = materialRepo.getMaterialById(-1);
+		assertEquals(0, material.getMaterialId());
+		assertEquals(null, material.getMaterialName());
+		assertEquals(null, material.getMaterialType());
+		assertEquals(null, material.getUnit());
+		assertEquals(null, material.getUnitCost());
 	}
 	
 	@Test
@@ -86,9 +95,12 @@ public class MaterialDatabaseRepositoryTest {
 	public void shouldDeleteMaterial() {
 		int affectedRows = materialRepo.deleteMaterialById(deleteMaterialId);
 		assertEquals(1, affectedRows);
-		Material expected = new Material();
-		Material actual = materialRepo.getMaterialById(deleteMaterialId);
-		assertEquals(expected, actual);
+		Material deletedMaterial = materialRepo.getMaterialById(deleteMaterialId);
+		assertEquals(0, deletedMaterial.getMaterialId());
+		assertNull(deletedMaterial.getMaterialName());
+		assertNull(deletedMaterial.getMaterialType());
+		assertNull(deletedMaterial.getUnit());
+		assertNull(deletedMaterial.getUnitCost());
 	}
 	
 	@Test

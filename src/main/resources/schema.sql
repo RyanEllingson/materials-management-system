@@ -37,3 +37,10 @@ create table materials (
     foreign key (material_type_id) references material_types(material_type_id),
     foreign key (unit_id) references units(unit_id)
 );
+
+create table labor_rates (
+    labor_rate_id int unique not null generated always as identity,
+    description varchar(255) not null,
+    rate_per_hour numeric not null,
+    primary key (labor_rate_id)
+);

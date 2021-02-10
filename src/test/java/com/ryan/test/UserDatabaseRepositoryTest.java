@@ -35,6 +35,12 @@ public class UserDatabaseRepositoryTest {
 		User user = new User(0, "testemail4", "password4", "firstname4", "lastname4", new Role(2, "Planner"));
 		createUserId = userRepo.insertUser(user);
 		assertNotEquals(0, createUserId);
+		User createdUser = userRepo.getUserById(createUserId);
+		assertEquals("testemail4", createdUser.getEmail());
+		assertEquals("password4", createdUser.getPassword());
+		assertEquals("firstname4", createdUser.getFirstName());
+		assertEquals("lastname4", createdUser.getLastName());
+		assertEquals(new Role(2, null), createdUser.getRole());
 	}
 	
 	@Test
