@@ -1,12 +1,10 @@
 package com.ryan.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
 import java.math.BigDecimal;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,56 +16,49 @@ import com.ryan.util.Environment;
 
 public class LaborRateDatabaseRepositoryTest {
 	private static LaborRateRepository rateRepo;
-	private static int createRateId;
-	private static int readRateId;
-	private static int updateRateId;
-	private static int deleteRateId;
 	
 	@BeforeClass
 	public static void setup() {
 		ConnectionFactory.setEnvironment(Environment.TEST);
+		ConnectionFactory.restoreKnownGoodState();
 		rateRepo = new LaborRateDatabaseRepository(ConnectionFactory.getConnection());
-		LaborRate readRate = new LaborRate(0, "testrate1", BigDecimal.ONE);
-		readRateId = rateRepo.createLaborRate(readRate);
-		LaborRate updateRate = new LaborRate(0, "testrate2", BigDecimal.ONE);
-		updateRateId = rateRepo.createLaborRate(updateRate);
-		LaborRate deleteRate = new LaborRate(0, "testrate3", BigDecimal.ONE);
-		deleteRateId = rateRepo.createLaborRate(deleteRate);
 	}
 	
 	@Test
 	public void shouldCreateLaborRate() {
 		LaborRate rate = new LaborRate(0, "testrate4", BigDecimal.ONE);
-		createRateId = rateRepo.createLaborRate(rate);
-		assertNotEquals(0, createRateId);
-		LaborRate createdRate = rateRepo.getLaborRateById(createRateId);
+		int insertId = rateRepo.createLaborRate(rate);
+		assertEquals(4, insertId);
+		LaborRate createdRate = rateRepo.getLaborRateById(insertId);
 		assertEquals("testrate4", createdRate.getDescription());
-		assertEquals(BigDecimal.ONE, createdRate.getRatePerHour());
+		assertEquals(BigDecimal.ONE.doubleValue(), createdRate.getRatePerHour().doubleValue(), 0.0001);
 	}
 	
 	@Test
 	public void shouldGetLaborRateById() {
-		LaborRate rate = rateRepo.getLaborRateById(readRateId);
-		assertEquals(readRateId, rate.getLaborRateId());
+		LaborRate rate = rateRepo.getLaborRateById(1);
+		assertEquals(1, rate.getLaborRateId());
 		assertEquals("testrate1", rate.getDescription());
-		assertEquals(BigDecimal.ONE, rate.getRatePerHour());
+		assertEquals(BigDecimal.ONE.doubleValue(), rate.getRatePerHour().doubleValue(), 0.0001);
 	}
 	
 	@Test
 	public void shouldNotFindNonExistingLaborRate() {
 		LaborRate rate = rateRepo.getLaborRateById(-1);
 		assertEquals(0, rate.getLaborRateId());
-		assertEquals(null, rate.getDescription());
-		assertEquals(null, rate.getRatePerHour());
+		assertNull(rate.getDescription());
+		assertNull(rate.getRatePerHour());
 	}
 	
 	@Test
 	public void shouldUpdateLaborRate() {
-		LaborRate expected = new LaborRate(updateRateId, "updatedrate", BigDecimal.TEN);
+		LaborRate expected = new LaborRate(2, "updatedrate", BigDecimal.TEN);
 		int affectedRows = rateRepo.updateLaborRate(expected);
 		assertEquals(1, affectedRows);
-		LaborRate actual = rateRepo.getLaborRateById(updateRateId);
-		assertEquals(expected, actual);
+		LaborRate actual = rateRepo.getLaborRateById(2);
+		assertEquals(expected.getLaborRateId(), actual.getLaborRateId());
+		assertEquals(expected.getDescription(), actual.getDescription());
+		assertEquals(expected.getRatePerHour().doubleValue(), actual.getRatePerHour().doubleValue(), 0.0001);
 	}
 	
 	@Test
@@ -79,9 +70,9 @@ public class LaborRateDatabaseRepositoryTest {
 	
 	@Test
 	public void shouldDeleteLaborRate() {
-		int affectedRows = rateRepo.deleteLaborRateById(deleteRateId);
+		int affectedRows = rateRepo.deleteLaborRateById(3);
 		assertEquals(1, affectedRows);
-		LaborRate deletedRate = rateRepo.getLaborRateById(deleteRateId);
+		LaborRate deletedRate = rateRepo.getLaborRateById(3);
 		assertEquals(0, deletedRate.getLaborRateId());
 		assertNull(deletedRate.getDescription());
 		assertNull(deletedRate.getRatePerHour());
@@ -91,13 +82,6 @@ public class LaborRateDatabaseRepositoryTest {
 	public void shouldNotDeleteNonExistingLaborRate() {
 		int affectedRows = rateRepo.deleteLaborRateById(-1);
 		assertEquals(0, affectedRows);
-	}
-	
-	@AfterClass
-	public static void teardown() {
-		rateRepo.deleteLaborRateById(createRateId);
-		rateRepo.deleteLaborRateById(readRateId);
-		rateRepo.deleteLaborRateById(updateRateId);
 	}
 
 }

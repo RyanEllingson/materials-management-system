@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
@@ -42,10 +44,12 @@ public class ConnectionFactory {
 				username = dbUri.getUserInfo().split(":")[0];
 				password = dbUri.getUserInfo().split(":")[1];
 				dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
+				break;
 			case TEST:
 				username = "postgres";
 				password = "postgres";
-				dbUrl = "jdbc:postgresql://localhost/postgres?currentSchema=materials_management";
+				dbUrl = "jdbc:postgresql://localhost/postgres?currentSchema=materials_management_test";
+				break;
 			case DEVELOPMENT:
 				username = "postgres";
 				password = "postgres";
@@ -62,5 +66,20 @@ public class ConnectionFactory {
 			configure();
 		}
 		return conn;
+	}
+	
+	public static void restoreKnownGoodState() {
+		if (environment == Environment.TEST) {
+			if (conn == null) {
+				configure();
+			}
+			String sql = "call known_good_state()";
+			try {
+				PreparedStatement ps = conn.prepareStatement(sql);
+				ps.execute();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
