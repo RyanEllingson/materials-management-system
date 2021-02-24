@@ -1,3 +1,10 @@
+create or replace procedure known_good_state()
+language plpgsql
+as $$
+begin
+
+drop table if exists inventory;
+
 drop table if exists labor_rates;
 
 drop table if exists materials;
@@ -45,6 +52,7 @@ create table materials (
     material_type_id int not null,
     unit_id int not null,
     unit_cost numeric not null,
+    inventory numeric default 0,
     primary key (material_id),
     foreign key (material_type_id) references material_types(material_type_id),
     foreign key (unit_id) references units(unit_id)
@@ -65,6 +73,8 @@ insert into material_types (material_type) values ('Raw Material'), ('Intermedia
 
 insert into units (unit) values ('Each'), ('Pounds');
 
-insert into materials (material_name, material_type_id, unit_id, unit_cost) values ('testmaterial1', 1, 1, 1.0), ('testmaterial2', 1, 1, 1.0), ('testmaterial3', 2, 1, 1.0);
+insert into materials (material_name, material_type_id, unit_id, unit_cost, inventory) values ('testmaterial1', 1, 1, 1.0, 2.5), ('testmaterial2', 1, 1, 1.0, 5.0), ('testmaterial3', 2, 1, 1.0, 8.3);
 
 insert into labor_rates (description, rate_per_hour) values ('testrate1', 1.0), ('testrate2', 1.0), ('testrate3', 1.0);
+
+end;$$

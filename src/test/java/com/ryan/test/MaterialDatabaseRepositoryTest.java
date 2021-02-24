@@ -29,7 +29,7 @@ public class MaterialDatabaseRepositoryTest {
 	
 	@Test
 	public void shouldCreateMaterial() {
-		Material material = new Material(0, "testmaterial4", new MaterialType(2, null), new Unit(1, null), BigDecimal.ONE);
+		Material material = new Material(0, "testmaterial4", new MaterialType(2, null), new Unit(1, null), BigDecimal.ONE, BigDecimal.TEN);
 		int insertId = materialRepo.createMaterial(material);
 		assertEquals(4, insertId);
 		Material createdMaterial = materialRepo.getMaterialById(insertId);
@@ -37,6 +37,7 @@ public class MaterialDatabaseRepositoryTest {
 		assertEquals(new MaterialType(2, null), createdMaterial.getMaterialType());
 		assertEquals(new Unit(1, null), createdMaterial.getUnit());
 		assertEquals(BigDecimal.ONE.doubleValue(), createdMaterial.getUnitCost().doubleValue(), 0.0001);
+		assertEquals(BigDecimal.TEN.doubleValue(), createdMaterial.getInventory().doubleValue(), 0.0001);
 	}
 	
 	@Test
@@ -47,6 +48,7 @@ public class MaterialDatabaseRepositoryTest {
 		assertEquals(new MaterialType(1, null), material.getMaterialType());
 		assertEquals(new Unit(1, null), material.getUnit());
 		assertEquals(BigDecimal.ONE.doubleValue(), material.getUnitCost().doubleValue(), 0.0001);
+		assertEquals(2.5, material.getInventory().doubleValue(), 0.0001);
 	}
 	
 	@Test
@@ -57,6 +59,7 @@ public class MaterialDatabaseRepositoryTest {
 		assertNull(material.getMaterialType());
 		assertNull(material.getUnit());
 		assertNull(material.getUnitCost());
+		assertNull(material.getInventory());
 	}
 	
 	@Test
@@ -69,11 +72,12 @@ public class MaterialDatabaseRepositoryTest {
 		assertEquals(material.getMaterialType(), materials.get(0).getMaterialType());
 		assertEquals(material.getUnit(), materials.get(0).getUnit());
 		assertEquals(material.getUnitCost().doubleValue(), materials.get(0).getUnitCost().doubleValue(), 0.0001);
+		assertEquals(material.getInventory().doubleValue(), materials.get(0).getInventory().doubleValue(), 0.0001);
 	}
 	
 	@Test
 	public void shouldUpdateMaterial() {
-		Material expected = new Material(2, "updatedmaterial", new MaterialType(1, null), new Unit(2, null), BigDecimal.TEN);
+		Material expected = new Material(2, "updatedmaterial", new MaterialType(1, null), new Unit(2, null), BigDecimal.TEN, BigDecimal.ONE);
 		int affectedRows = materialRepo.updateMaterial(expected);
 		assertEquals(1, affectedRows);
 		Material actual = materialRepo.getMaterialById(2);
@@ -82,11 +86,12 @@ public class MaterialDatabaseRepositoryTest {
 		assertEquals(expected.getMaterialType(), actual.getMaterialType());
 		assertEquals(expected.getUnit(), actual.getUnit());
 		assertEquals(expected.getUnitCost().doubleValue(), actual.getUnitCost().doubleValue(), 0.0001);
+		assertEquals(expected.getInventory().doubleValue(), actual.getInventory().doubleValue(), 0.0001);
 	}
 	
 	@Test
 	public void shouldNotUpdateNonExistingMaterial() {
-		Material bogusMaterial = new Material(-1, "phonyname", new MaterialType(3, null), new Unit (2, null), BigDecimal.ZERO);
+		Material bogusMaterial = new Material(-1, "phonyname", new MaterialType(3, null), new Unit (2, null), BigDecimal.ZERO, BigDecimal.ZERO);
 		int affectedRows = materialRepo.updateMaterial(bogusMaterial);
 		assertEquals(0, affectedRows);
 	}
@@ -101,6 +106,7 @@ public class MaterialDatabaseRepositoryTest {
 		assertNull(deletedMaterial.getMaterialType());
 		assertNull(deletedMaterial.getUnit());
 		assertNull(deletedMaterial.getUnitCost());
+		assertNull(deletedMaterial.getInventory());
 	}
 	
 	@Test

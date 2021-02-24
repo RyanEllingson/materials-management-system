@@ -33,6 +33,7 @@ create table materials (
     material_type_id int not null,
     unit_id int not null,
     unit_cost numeric not null,
+    inventory numeric default 0,
     primary key (material_id),
     foreign key (material_type_id) references material_types(material_type_id),
     foreign key (unit_id) references units(unit_id)

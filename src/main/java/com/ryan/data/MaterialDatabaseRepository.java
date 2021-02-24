@@ -22,13 +22,14 @@ public class MaterialDatabaseRepository implements MaterialRepository {
 	@Override
 	public int createMaterial(Material material) {
 		int insertId = 0;
-		String sql = "insert into materials (material_name, material_type_id, unit_id, unit_cost) values (?,?,?,?)";
+		String sql = "insert into materials (material_name, material_type_id, unit_id, unit_cost, inventory) values (?,?,?,?,?)";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, material.getMaterialName());
 			ps.setInt(2, material.getMaterialType().getMaterialTypeId());
 			ps.setInt(3, material.getUnit().getUnitId());
 			ps.setBigDecimal(4, material.getUnitCost());
+			ps.setBigDecimal(5, material.getInventory());
 			ps.execute();
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
@@ -43,7 +44,7 @@ public class MaterialDatabaseRepository implements MaterialRepository {
 	@Override
 	public Material getMaterialById(int materialId) {
 		Material material = new Material();
-		String sql = "select material_id, material_name, material_type_id, unit_id, unit_cost from materials where material_id = ?";
+		String sql = "select material_id, material_name, material_type_id, unit_id, unit_cost, inventory from materials where material_id = ?";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, materialId);
@@ -54,6 +55,7 @@ public class MaterialDatabaseRepository implements MaterialRepository {
 				material.setMaterialType(new MaterialType(rs.getInt(3), null));
 				material.setUnit(new Unit(rs.getInt(4), null));
 				material.setUnitCost(rs.getBigDecimal(5));
+				material.setInventory(rs.getBigDecimal(6));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -64,7 +66,7 @@ public class MaterialDatabaseRepository implements MaterialRepository {
 	@Override
 	public List<Material> getMaterialsByType(MaterialType materialType) {
 		List<Material> materials = new ArrayList<>();
-		String sql = "select material_id, material_name, material_type_id, unit_id, unit_cost from materials where material_type_id = ?";
+		String sql = "select material_id, material_name, material_type_id, unit_id, unit_cost, inventory from materials where material_type_id = ?";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, materialType.getMaterialTypeId());
@@ -75,7 +77,8 @@ public class MaterialDatabaseRepository implements MaterialRepository {
 					rs.getString(2),
 					new MaterialType(rs.getInt(3), null),
 					new Unit(rs.getInt(4), null),
-					rs.getBigDecimal(5)
+					rs.getBigDecimal(5),
+					rs.getBigDecimal(6)
 				));
 			}
 		} catch (SQLException e) {
@@ -87,14 +90,15 @@ public class MaterialDatabaseRepository implements MaterialRepository {
 	@Override
 	public int updateMaterial(Material material) {
 		int affectedRows = 0;
-		String sql = "update materials set material_name = ?, material_type_id = ?, unit_id = ?, unit_cost = ? where material_id = ?";
+		String sql = "update materials set material_name = ?, material_type_id = ?, unit_id = ?, unit_cost = ?, inventory = ? where material_id = ?";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, material.getMaterialName());
 			ps.setInt(2, material.getMaterialType().getMaterialTypeId());
 			ps.setInt(3, material.getUnit().getUnitId());
 			ps.setBigDecimal(4, material.getUnitCost());
-			ps.setInt(5, material.getMaterialId());
+			ps.setBigDecimal(5, material.getInventory());
+			ps.setInt(6, material.getMaterialId());
 			affectedRows = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
